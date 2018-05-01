@@ -1,31 +1,11 @@
-# Adonis fullstack application
+---------------------------------------------------------
+# Developer Hangout Coding Challenge
+## May 2018 - e-commerce backend
 
-This is the fullstack boilerplate for AdonisJs, it comes pre-configured with.
+*Daniel Duarte*
+*List of external files used (Libraries, Frameworks): Adonisjs Angular*
 
-1. Bodyparser
-2. Session
-3. Authentication
-4. Web security middleware
-5. CORS
-6. Edge template engine
-7. Lucid ORM
-8. Migrations and seeds
+*List of all endpoints along with a brief description on each endpoint and how it is used. This is a very crucial part of the challenge, and is required to be here in the README. Failure to document the endpoints will result in a DQ*
 
-## Setup
-
-Use the adonis command to install the blueprint
-
-```bash
-adonis new yardstick
-```
-
-or manually clone the repo and then run `npm install`.
-
-
-### Migrations
-
-Run the following command to run startup migrations.
-
-```js
-adonis migration:run
-```
+*A brief description of the entire App, including features and how you handled organizing/tracking the data. This is also a good place to reference any issues you had or your general experience*
+---------------------------------------------------------
