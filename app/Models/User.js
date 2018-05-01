@@ -31,6 +31,18 @@ class User extends Model {
   tokens () {
     return this.hasMany('App/Models/Token')
   }
+
+  servers () {
+    return this.hasMany('App/Models/Server')
+  }
+
+  services () {
+    return this.hasMany('App/Models/Service')
+  }
+
+  storageCenters () {
+    return this.hasMany('App/Models/StorageCenters')
+  }
 }
 
 module.exports = User
