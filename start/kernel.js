@@ -36,7 +36,11 @@ const globalMiddleware = [
 |
 */
 const namedMiddleware = {
-  auth: 'Adonis/Middleware/Auth'
+  auth: 'Adonis/Middleware/Auth',
+  findUser: 'App/Middleware/FindUser',
+  findService: 'App/Middleware/FindService',
+  findStorageCenter: 'App/Middleware/FindStorageCenter',
+  findServer: 'App/Middleware/FindServer'
 }
 
 /*

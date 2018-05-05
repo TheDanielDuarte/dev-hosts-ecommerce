@@ -3,8 +3,8 @@
 const Model = use('Model')
 
 class Server extends Model {
-  user () {
-    return this.belongsTo('App/Models/User')
+  users () {
+    return this.belongsToMany('App/Models/User')
   }
 }
 

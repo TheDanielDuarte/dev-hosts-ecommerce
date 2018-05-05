@@ -10,11 +10,9 @@ class ServerSchema extends Schema {
       table.string('name').notNullable()
       table.integer('memory-in-gb').unsigned()
       table.integer('cpu').unsigned()
-      table.integer('storage-in-gb')
+      table.integer('storage-in-gb').notNullable()
       table.integer('transfer-in-tb').unsigned()
-      table.integer('price-per-month')
-      table.integer('user_id').unsigned()
-      table.foreign('user_id').references('users.id')
+      table.integer('price-per-month').notNullable()
     })
   }
 

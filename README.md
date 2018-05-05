@@ -2,7 +2,7 @@
 # Developer Hangout Coding Challenge
 ## May 2018 - e-commerce backend
 
-*Daniel Duarte*
+*Daniel Duarte* 
 *Adonisjs, url-parse*
 
 ##### Routes

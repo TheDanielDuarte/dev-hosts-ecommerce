@@ -12,7 +12,7 @@ class UserSchema extends Schema {
       table.string('email', 254).notNullable().unique()
       table.string('password', 60).notNullable()
       table.decimal('charge-per-month').defaultTo(0.0).unsigned()
-      table.string('role').notNullable()
+      table.string('role').defaultTo('user')
     })
   }
 

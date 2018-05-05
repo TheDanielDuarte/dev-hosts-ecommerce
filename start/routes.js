@@ -14,5 +14,25 @@
 */
 
 const Route = use('Route')
+const middlewareMap = name => new Map([
+  [['update', 'show', 'destroy'], [name]]
+])
 
-Route.on('/').render('welcome')
+Route
+  .group(() => {
+    Route
+      .resource('users', 'UserController')
+      .middleware(middlewareMap('findUser'))
+    Route
+      .resource('storage-centers', 'StorageCenterController')
+      .middleware(middlewareMap('findStorageCenter'))
+    Route
+      .resource('services', 'ServiceController')
+      .middleware(middlewareMap('findService'))
+    Route
+      .resource('servers', 'ServerController')
+      .middleware(middlewareMap('findServer'))
+  })
+  .prefix('api')
+
+Route.on('*').render('welcome')

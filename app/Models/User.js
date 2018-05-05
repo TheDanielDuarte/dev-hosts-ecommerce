@@ -43,6 +43,10 @@ class User extends Model {
   storageCenters () {
     return this.hasMany('App/Models/StorageCenters')
   }
+
+  static get hidden() {
+    return ['password']
+  }
 }
 
 module.exports = User
