@@ -23,6 +23,12 @@ Route
     Route
       .resource('users', 'UserController')
       .middleware(middlewareMap('findUser'))
+      .validator(new Map([
+        [['users.store'], ['StoreUser']],
+        [['users.update'], ['UpdateUser']]
+      ]))
+    Route
+      .post('login', 'UserController.login')
     Route
       .resource('storage-centers', 'StorageCenterController')
       .middleware(middlewareMap('findStorageCenter'))

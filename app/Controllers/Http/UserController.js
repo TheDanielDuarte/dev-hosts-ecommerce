@@ -2,14 +2,40 @@
 
 const User = use('App/Models/User')
 const userFields = ['first-name', 'last-name', 'email', 'password', 'role', 'charge-per-month']
+const Logger = use('Logger')
 
 class UserController {
   async index () {
-    const users = await User.all()
+    const users = await User.query().with('tokens').fetch()
     return {
       successfull: true,
       errors: [],
       data: users
+    }
+  }
+
+  async login({ auth, request, response }) {
+    const { email, password } = request.post()
+
+    try {
+      const jwt = await auth.attempt(email, password)
+      response
+        .status(200)
+        .json({
+          data: {
+            token: jwt
+          },
+          successfull: true,
+          errors: []
+        })
+    } catch (error) {
+      return response
+        .status(403)
+        .json({
+          successfull: false,
+          errors: [error],
+          data: null
+        })
     }
   }
 
