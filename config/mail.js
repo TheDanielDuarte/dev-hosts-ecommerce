@@ -25,12 +25,12 @@ module.exports = {
   smtp: {
     driver: 'smtp',
     pool: true,
-    port: 2525,
-    host: Env.get('SMTP_HOST'),
+    port: Env.get('MAILGUN_SMTP_PORT', 2525),
+    host: Env.get('SMTP_HOST', Env.get('MAILGUN_SMTP_SERVER')),
     secure: false,
     auth: {
-      user: Env.get('MAIL_USERNAME'),
-      pass: Env.get('MAIL_PASSWORD')
+      user: Env.get('MAIL_USERNAME', Env.get('MAILGUN_SMTP_LOGIN')),
+      pass: Env.get('MAIL_PASSWORD', Env.get('MAILGUN_SMTP_PASSWORD'))
     },
     maxConnections: 5,
     maxMessages: 100,

@@ -16,6 +16,7 @@ class FindStorageCenter {
           data: null,
           successfull: false
         })
+        return
     }
     await next()
   }

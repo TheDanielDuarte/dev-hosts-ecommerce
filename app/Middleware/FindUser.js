@@ -16,6 +16,7 @@ class FindUser {
           data: null,
           successfull: false
         })
+      return
     }
     await next()
   }

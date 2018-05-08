@@ -16,6 +16,7 @@ class FindServer {
           data: null,
           successfull: false
         })
+      return
     }
     await next()
   }

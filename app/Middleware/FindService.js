@@ -16,6 +16,7 @@ class FindService {
           data: null,
           successfull: false
         })
+      return
     }
     await next()
   }
