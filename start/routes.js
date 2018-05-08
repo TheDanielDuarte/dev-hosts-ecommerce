@@ -41,4 +41,7 @@ Route
   })
   .prefix('api')
 
+Route.get('register', ({ view }) => {
+  return view.render('emails.register', { user: {firstName: 'Daniel', lastName: 'Duarte', email: 'danielduarte2004@gmail.com'} })
+})
 Route.on('*').render('welcome')

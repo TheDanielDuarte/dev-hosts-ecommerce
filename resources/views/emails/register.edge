@@ -1,0 +1,59 @@
+@layout('layout')
+
+@section('links')
+  <style>
+    body {
+      background: #EFF0F4;
+      display: flex;
+      justify-content: center;
+    }
+    header {
+      background-image: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+
+    footer {
+      text-transform: uppercase;
+    }
+  </style>
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.12/css/all.css">
+@endsection
+
+@section('content')
+  <div class="bg-light w-50 my-2">
+     <div class="container border-secondary border  rounded bg-light text-center px-0">
+    <header class="p-5 text-light">
+      <span class="text-light font-weight-bold rounded p-2">DevHosts</span>
+      <h1 class="display-4 pb-2">Welcome {{ user.firstName }}</h1>
+      <p class="lead pb-4">DevHosts, the best VPS and cloud computing platform. </p>
+      <a class="btn bg-light px-5 d-inline-block" href="devhosts.herokuapp.com/dashboard">Start</a>
+    </header>
+    <article class="container">
+      <section>
+        <div class="lead">
+          <i class="fas fa-server"></i>
+        </div>
+        <a href="devhosts.herokuapp.com/servers" class="h5">Check our VPS - Standard Servers</a>
+        <p class="small text-secondary">These are our standard choices for the regular user or your average website</p>
+        <hr>
+      </section>
+      <section>
+        <div class="lead">
+          <i class="fas fa-database"></i>
+        </div>
+        <a href="devhosts.herokuapp.com/storage" class="h5">Store your data in the cloud</a>
+        <p class="small text-secondary">We also have dedicated JSON storage</p>
+        <hr>
+      </section>
+      <section>
+        <a href="devhosts.herokuapp.com/services" class="h5">Check our wide variety of services</a>
+        <p class="small text-secondary">Load Balancer, Continuous integration, etc.</p>
+        <hr>
+      </section>
+    </article>
+
+    <footer class="text-center py-2 small text-muted">
+      &copy; 2018 DevHosts. All rights reserved.
+    </footer>
+  </div>
+  </div>
+@endsection

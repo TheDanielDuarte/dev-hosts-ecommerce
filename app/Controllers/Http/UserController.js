@@ -3,6 +3,7 @@
 const User = use('App/Models/User')
 const userFields = ['first-name', 'last-name', 'email', 'password', 'role', 'charge-per-month']
 const Logger = use('Logger')
+const Mail = use('Mail')
 
 class UserController {
   async index () {
@@ -39,15 +40,32 @@ class UserController {
     }
   }
 
-  async store ({ request, response }) {
+  async store ({ request, response, auth }) {
     const data = request.only(userFields)
     const user = await User.create(data)
+
+    const promises = [ auth.generate(user), Mail.send('emails.register', {
+        user: {
+          ...user,
+          firstName: user['first-name'],
+          lastName: user['last-name']
+        }
+      },
+      message => {
+        message
+        .from('daniel@devhosts.com', 'Daniel')
+        .to(user.email)
+        .subject(`Welcome to DevHosts, ${user['first-name']}`)
+      }
+    ) ]
+    const [ token ] = await Promise.all(promises)
+
     return response
       .status(201)
       .json({
         errors: [],
         successfull: true,
-        data: user
+        data: { user, token }
       })
   }
 
