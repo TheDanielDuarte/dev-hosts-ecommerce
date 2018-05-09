@@ -11,4 +11,4 @@ tmp
 database/development.sqlite
 
 # Angular client (temporaly)
-client
+dev-hosts-client
