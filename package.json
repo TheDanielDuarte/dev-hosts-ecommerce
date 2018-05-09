@@ -12,9 +12,6 @@
     "adonisjs",
     "adonis-app"
   ],
-  "engines": {
-    "node": "9.11.1"
-  },
   "author": "Daniel Duarte",
   "license": "MIT",
   "private": true,
@@ -31,6 +28,7 @@
     "@adonisjs/session": "^1.0.23",
     "@adonisjs/shield": "^1.0.6",
     "@adonisjs/validator": "^5.0.3",
+    "@adonisjs/vow": "^1.0.15",
     "mysql": "^2.15.0",
     "url-parse": "^1.4.0"
   },
