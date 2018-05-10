@@ -28,7 +28,7 @@ Route
         [['users.update'], ['UpdateUser']]
       ]))
     Route
-      .post('login', 'UserController.login')
+      .post('users/login', 'UserController.login')
     Route
       .resource('storage-centers', 'StorageCenterController')
       .middleware(middlewareMap('findStorageCenter'))

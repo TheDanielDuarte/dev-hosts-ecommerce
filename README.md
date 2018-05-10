@@ -14,6 +14,7 @@ Users
 - __PATCH /api/users/:id__ - Update a user
 - __DELETE /api/users/:id__ - Delete a user
 - __GET /api/users/:id__ - Show a user
+- __POST /api/users/login__ - Login a user using JWT
 
 Servers
 - __GET /api/servers__ - List all servers

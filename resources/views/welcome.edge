@@ -1,13 +1,15 @@
 @layout('layout')
 
 @section('links')
-  {{ css('style') }}
+  {{ css('styles.34c57ab7888ec1573f9c') }}
 @endsection
 
 @section('content')
-  <section>
-    <div class="logo"></div>
-    <div class="title"></div>
-    <div class="subtitle"><p>AdonisJs simplicity will make you feel confident about your code</p></div>
-  </section>  
+  <app-root></app-root>
+@endsection
+
+@section('scripts')
+  {{ script('runtime.6afe30102d8fe7337431') }}
+  {{ script('polyfills.2903ad11212d7d797800') }}
+  {{ script('main.7cada214dbc41514e5fe') }}
 @endsection

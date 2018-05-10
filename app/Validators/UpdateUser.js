@@ -34,7 +34,7 @@ class UpdateUser {
       .json({
         errors,
         data: null,
-        successfull: true
+        successfull: false
       })
   }
 
