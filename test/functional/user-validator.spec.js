@@ -27,7 +27,7 @@ test('It shouldn\'t store a user with an invalid email', async ({ client, assert
 })
 
 
-test('It shouldn\'t update a user with an invalid email', async ({ client, assert }) => {
+test('\t\t\t\tIt shouldn\'t update a user with an invalid email', async ({ client, assert }) => {
   const response = await client.patch(`/api/users/${user.id}`).send({ email: 'wrong email', password: '97765431821', 'first-name': 'Wrong', 'last-name': 'email'}).end()
   assert.exists(response.body.errors)
   assert.isArray(response.body.errors)
