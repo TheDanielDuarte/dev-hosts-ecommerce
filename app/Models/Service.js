@@ -10,6 +10,10 @@ class Service extends Model {
   group () {
     return this.belongsTo('App/Models/GroupOfServices')
   }
+
+  static get hidden() {
+    return ['group_id']
+  }
 }
 
 module.exports = Service
