@@ -14,9 +14,6 @@
 */
 
 const Route = use('Route')
-const middlewareMap = name => new Map([
-  [['update', 'show', 'destroy'], [name]]
-])
 
 Route
   .group(() => {
@@ -31,15 +28,25 @@ Route
       ]))
     Route
       .post('users/login', 'UserController.login')
-    Route
-      .resource('storage-centers', 'StorageCenterController')
-      .middleware(middlewareMap('findStorageCenter'))
-    Route
-      .resource('services', 'ServiceController')
-      .middleware(middlewareMap('findService'))
-    Route
-      .resource('servers', 'ServerController')
-      .middleware(middlewareMap('findServer'))
+    
+    Route.get('storage-centers', 'StorageCenterController.index')
+    Route.get('storage-centers/:id', 'StorageCenterController.show').middleware(['findStorageCenter'])
+    
+    Route.get('services', 'ServiceController.index')
+    Route.get('services/:id', 'ServiceController.show').middleware(['findService'])
+    
+    Route.get('servers', 'ServerController.index')
+    Route.get('servers/:id', 'ServerController.show').middleware(['findServer'])
+    
+    // Route
+    //   .resource('storage-centers', 'StorageCenterController')
+    //   .middleware(middlewareMap('findStorageCenter'))
+    // Route
+    //   .resource('services', 'ServiceController')
+    //   .middleware(middlewareMap('findService'))
+    // Route
+    //   .resource('servers', 'ServerController')
+    //   .middleware(middlewareMap('findServer'))
   })
   .prefix('api')
 

@@ -1,9 +1,7 @@
 'use strict'
 
 const Server = use('App/Models/Server')
-const Logger = use('Logger')
-const serverFields = ['name', 'memory-in-gb', 'cpu', 'storage-in-gb', 'transfer-in-tb', 'price-per-month']
-
+// const serverFields = ['name', 'memory-in-gb', 'cpu', 'storage-in-gb', 'transfer-in-tb', 'price-per-month']
 
 class ServerController {
   async index () {
@@ -15,18 +13,6 @@ class ServerController {
     }
   }
 
-  async store ({ request, response }) {
-    const data = request.only(serverFields)
-    const server = await Server.create(data)
-    return response
-      .status(201)
-      .json({
-        errors: [],
-        successfull: true,
-        data: server
-      })
-  }
-
   async show ({ response, request }) {
     const { server } = request.post()
     return {
@@ -35,33 +21,46 @@ class ServerController {
       data: server
     }
   }
+  
+  // async store ({ request, response }) {
+  //   const data = request.only(serverFields)
+  //   const server = await Server.create(data)
+  //   return response
+  //     .status(201)
+  //     .json({
+  //       errors: [],
+  //       successfull: true,
+  //       data: server
+  //     })
+  // }
 
-  async update ({ request, response }) {
-    const { server } = request.post()
-    const data = request.only(serverFields)
 
-    server.merge(data)
+  // async update ({ request, response }) {
+  //   const { server } = request.post()
+  //   const data = request.only(serverFields)
 
-    await server.save()
+  //   server.merge(data)
+
+  //   await server.save()
     
-    response.status(201).json({
-      successfull: true,
-      errors: [],
-      data: server
-    })
-  }
+  //   response.status(201).json({
+  //     successfull: true,
+  //     errors: [],
+  //     data: server
+  //   })
+  // }
 
-  async destroy ({ request, response }) {
-    const { server } = request.post()
+  // async destroy ({ request, response }) {
+  //   const { server } = request.post()
 
-    await server.delete()
+  //   await server.delete()
 
-    return {
-      successfull: true,
-      errors: [],
-      data: server
-    }
-  }
+  //   return {
+  //     successfull: true,
+  //     errors: [],
+  //     data: server
+  //   }
+  // }
 }
 
 module.exports = ServerController

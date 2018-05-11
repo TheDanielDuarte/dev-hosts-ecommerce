@@ -2,7 +2,7 @@
 
 
 const Service = use('App/Models/Service')
-const serviceFields = ['name', 'description', 'price-per-month', 'events-per-month', 'history-in-days', 'users', 'concurrent-builds', 'builds-per-day']
+// const serviceFields = ['name', 'description', 'price-per-month', 'events-per-month', 'history-in-days', 'users', 'concurrent-builds', 'builds-per-day']
 
 class ServiceController {
   async index () {
@@ -14,19 +14,6 @@ class ServiceController {
     }
   }
 
-  async store ({ request, response }) {
-    const data = request.only([...serviceFields, 'group'])
-    const service = await Service.create(data)
-    
-    response
-      .status(201)
-      .json({
-        successfull: true,
-        errors: [],
-        data: service
-      })
-  }
-
   async show ({ request }) {
     const { service } = request.post()
     return {
@@ -36,32 +23,45 @@ class ServiceController {
     }
   }
 
-  async update ({ request }) {
-    const { service } = request.post()
-    const data = request.only([...serviceFields, 'group_id'])
+  // async store ({ request, response }) {
+  //   const data = request.only([...serviceFields, 'group'])
+  //   const service = await Service.create(data)
+    
+  //   response
+  //     .status(201)
+  //     .json({
+  //       successfull: true,
+  //       errors: [],
+  //       data: service
+  //     })
+  // }
 
-    service.merge(data)
+  // async update ({ request }) {
+  //   const { service } = request.post()
+  //   const data = request.only([...serviceFields, 'group_id'])
 
-    await service.save()
+  //   service.merge(data)
 
-    return {
-      successfull: true,
-      errors: [],
-      data: service
-    }
-  }
+  //   await service.save()
 
-  async destroy ({ request }) {
-    const { service } = request.post()
+  //   return {
+  //     successfull: true,
+  //     errors: [],
+  //     data: service
+  //   }
+  // }
 
-    await service.delete()
+  // async destroy ({ request }) {
+  //   const { service } = request.post()
 
-    return {
-      successfull: true,
-      errors: [],
-      data: service
-    }
-  }
+  //   await service.delete()
+
+  //   return {
+  //     successfull: true,
+  //     errors: [],
+  //     data: service
+  //   }
+  // }
 }
 
 module.exports = ServiceController
