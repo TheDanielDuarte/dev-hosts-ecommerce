@@ -4,7 +4,7 @@ const User = use('App/Models/User')
 const NotFoundException = use('App/Exceptions/NotFoundException')
 
 class FindUser {
-  async handle ({ request, response, params: { id } }, next) {
+  async handle ({ request, params: { id } }, next) {
     // call next to advance the request
     try {
       const user = await User.findOrFail(id)

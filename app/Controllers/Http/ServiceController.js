@@ -2,7 +2,7 @@
 
 
 const Service = use('App/Models/Service')
-const serviceFields = ['name', 'short-description', 'description', 'price', 'events-per-month', 'history', 'users', 'concurrent-builds', 'builds']
+const serviceFields = ['name', 'description', 'price-per-month', 'events-per-month', 'history-in-days', 'users', 'concurrent-builds', 'builds-per-day']
 
 class ServiceController {
   async index () {
