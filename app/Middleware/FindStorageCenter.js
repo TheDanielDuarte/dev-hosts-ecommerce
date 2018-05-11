@@ -1,22 +1,16 @@
 'use strict'
 
-const StorageCenter = use('App/Models/StorageSenter')
+const StorageCenter = use('App/Models/StorageCenter')
+const NotFoundException = use('App/Exceptions/NotFoundException')
 
 class FindStorageCenter {
-  async handle ({ request , response }, next) {
+  async handle ({ request , response, params: { id } }, next) {
     // call next to advance the request
     try {
       const storageCenter = await StorageCenter.findOrFail(id)
       request.body.storageCenter = storageCenter
     } catch (error) {
-      return response
-        .status(404)
-        .json({
-          errors: [`Storage Center with id - ${id} not found`],
-          data: null,
-          successfull: false
-        })
-        return
+      throw new NotFoundException(`Storage Center with id - ${id} not found`)
     }
     await next()
   }

@@ -1,6 +1,7 @@
 'use strict'
 
 const User = use('App/Models/User')
+const NotFoundException = use('App/Exceptions/NotFoundException')
 
 class FindUser {
   async handle ({ request, response, params: { id } }, next) {
@@ -9,14 +10,7 @@ class FindUser {
       const user = await User.findOrFail(id)
       request.body.user = user
     } catch (error) {
-      response
-        .status(404)
-        .json({
-          errors: [`User with id - ${id} not found`],
-          data: null,
-          successfull: false
-        })
-      return
+      throw new NotFoundException(`User with id - ${id} not found`)
     }
     await next()
   }

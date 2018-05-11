@@ -1,6 +1,7 @@
 'use strict'
 
 const Server = use('App/Models/Server')
+const NotFoundException = use('App/Exceptions/NotFoundExceptions')
 
 class FindServer {
   async handle ({ request, response, params: { id } }, next) {
@@ -9,14 +10,7 @@ class FindServer {
       const server = await Server.findOrFail(id)
       request.body.server = server
     } catch (error) {
-      response
-        .status(404)
-        .json({
-          errors: [`Server with id - ${id} not found`],
-          data: null,
-          successfull: false
-        })
-      return
+      throw new NotFoundException(`Server with id - ${id} not found`)
     }
     await next()
   }
