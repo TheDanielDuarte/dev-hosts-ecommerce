@@ -22,7 +22,9 @@ Route
   .group(() => {
     Route
       .resource('users', 'UserController')
-      .middleware(middlewareMap('findUser'))
+      .middleware(new Map([
+        [['update', 'show', 'destroy'], ['auth:jwt', 'findUser', 'userIsCorrect']],
+      ]))
       .validator(new Map([
         [['users.store'], ['StoreUser']],
         [['users.update'], ['UpdateUser']]
@@ -32,15 +34,12 @@ Route
     Route
       .resource('storage-centers', 'StorageCenterController')
       .middleware(middlewareMap('findStorageCenter'))
-      .middleware(['auth:jwt'])
     Route
       .resource('services', 'ServiceController')
       .middleware(middlewareMap('findService'))
-      .middleware('auth:jwt')
     Route
       .resource('servers', 'ServerController')
       .middleware(middlewareMap('findServer'))
-      .middleware('auth:jwt')
   })
   .prefix('api')
 

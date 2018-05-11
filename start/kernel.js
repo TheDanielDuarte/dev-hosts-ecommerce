@@ -40,7 +40,8 @@ const namedMiddleware = {
   findUser: 'App/Middleware/FindUser',
   findService: 'App/Middleware/FindService',
   findStorageCenter: 'App/Middleware/FindStorageCenter',
-  findServer: 'App/Middleware/FindServer'
+  findServer: 'App/Middleware/FindServer',
+  userIsCorrect: 'App/Middleware/UserIsCorrect'
 }
 
 /*

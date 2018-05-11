@@ -2,12 +2,12 @@
 
 const User = use('App/Models/User')
 const userFields = ['first-name', 'last-name', 'email', 'password', 'role', 'charge-per-month']
-const Logger = use('Logger')
 const Mail = use('Mail')
+const NotFoundException = use('App/Exceptions/NotFoundException')
 
 class UserController {
   async index () {
-    const users = await User.query().with('tokens').fetch()
+    const users = await User.all()
     return {
       successfull: true,
       errors: [],
@@ -17,14 +17,15 @@ class UserController {
 
   async login({ auth, request, response }) {
     const { email, password } = request.post()
-
     try {
       const jwt = await auth.attempt(email, password)
+      const user = await User.findBy({ email })
       response
         .status(200)
         .json({
           data: {
-            token: jwt
+            token: jwt,
+            user
           },
           successfull: true,
           errors: []
@@ -69,8 +70,19 @@ class UserController {
       })
   }
 
-  async show ({ request, params: { id } }) {
+  async show ({ request }) {
     const { user } = request.post()
+
+    const [ services, servers, storageCenters ] = await Promise.all([
+      user.services().fetch(),
+      user.servers().fetch(),
+      user.storageCenters().fetch()
+    ])
+
+    user.services = services
+    user.servers = servers
+    user['data-storage'] = storageCenters
+
     return {
       errors: [],
       successfull: true,
@@ -79,10 +91,36 @@ class UserController {
   }
 
   async update ({ request }) {
-    const { user } = request.post()
+    const { user, services, servers, storage } = request.post()
+
     const fields = userFields.filter(field => !field.includes('role'))
     const data = request.only(fields)
     
+    if(services) {
+      await user.services().detach()
+      try {
+        await user.services().attach(services)
+      } catch (error) {
+        throw new NotFoundException('Service not found')
+      }
+    }
+    if(servers) {
+      await user.servers().detach()
+      try {
+        await user.servers().attach(servers)
+      } catch (error) {
+        throw new NotFoundException('Server not found')
+      }
+    }
+    if(storage) {
+      await user.storageCenters().detach()
+      try {
+        await user.storageCenters().attach(storage)
+      } catch (error) {
+        throw new NotFoundException('Storage center not found')
+      }
+    }
+
     user.merge(data)
 
     await user.save()
@@ -96,7 +134,7 @@ class UserController {
 
   async destroy ({ request }) {
     const { user } = request.post()
-    
+
     await user.delete()
 
     return {

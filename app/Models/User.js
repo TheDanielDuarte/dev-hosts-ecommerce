@@ -29,19 +29,19 @@ class User extends Model {
    * @return {Object}
    */
   tokens () {
-    return this.hasMany('App/Models/Token')
+    return this.belongsToMany('App/Models/Token')
   }
 
   servers () {
-    return this.hasMany('App/Models/Server')
+    return this.belongsToMany('App/Models/Server')
   }
 
   services () {
-    return this.hasMany('App/Models/Service')
+    return this.belongsToMany('App/Models/Service')
   }
 
   storageCenters () {
-    return this.hasMany('App/Models/StorageCenters')
+    return this.belongsToMany('App/Models/StorageCenter')
   }
 
   static get hidden() {
