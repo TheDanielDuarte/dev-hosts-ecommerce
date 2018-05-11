@@ -7,7 +7,7 @@ class FindService {
   async handle ({ request, params: { id } }, next) {
     // call next to advance the request
     try {
-      const service = await Service.findOrFail(id)
+      const service = await Service.query().where({ id }).with('group').fetch()
       request.body.service = service
     } catch (error) {
       throw new NotFoundException(`Service with id - ${id} not found`)
