@@ -8,6 +8,9 @@ class FindService {
     // call next to advance the request
     try {
       const service = await Service.query().where({ id }).with('group').fetch()
+      
+      if(!service) throw new NotFoundException(`Service with id - ${id} not found`)
+
       request.body.service = service
     } catch (error) {
       throw new NotFoundException(`Service with id - ${id} not found`)
