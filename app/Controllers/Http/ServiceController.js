@@ -6,7 +6,7 @@ const serviceFields = ['name', 'description', 'price-per-month', 'events-per-mon
 
 class ServiceController {
   async index () {
-    const services = await Service.all()
+    const services = await Service.query().with('group').fetch()
     return {
       successfull: true,
       errors: [],
@@ -15,7 +15,7 @@ class ServiceController {
   }
 
   async store ({ request, response }) {
-    const data = request.only(serviceFields)
+    const data = request.only([...serviceFields, 'group'])
     const service = await Service.create(data)
     
     response
@@ -38,7 +38,7 @@ class ServiceController {
 
   async update ({ request }) {
     const { service } = request.post()
-    const data = request.only(...serviceFields)
+    const data = request.only([...serviceFields, 'group_id'])
 
     service.merge(data)
 

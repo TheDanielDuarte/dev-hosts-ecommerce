@@ -4,7 +4,7 @@ const Server = use('App/Models/Server')
 const NotFoundException = use('App/Exceptions/NotFoundExceptions')
 
 class FindServer {
-  async handle ({ request, response, params: { id } }, next) {
+  async handle ({ request, params: { id } }, next) {
     // call next to advance the request
     try {
       const server = await Server.findOrFail(id)

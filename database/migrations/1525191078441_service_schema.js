@@ -15,6 +15,8 @@ class ServiceSchema extends Schema {
       table.integer('users').nullable()
       table.string('concurrent-builds').nullable()
       table.string('builds-per-day').nullable()
+      table.integer('group_id').unsigned()
+      table.foreign('group_id').references('groups_of_services.id')
     })
   }
 

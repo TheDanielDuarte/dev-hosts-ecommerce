@@ -4,7 +4,7 @@ const Service = use('App/Models/Service')
 const NotFoundException = use('App/Exceptions/NotFoundException')
 
 class FindService {
-  async handle ({ request }, next) {
+  async handle ({ request, params: { id } }, next) {
     // call next to advance the request
     try {
       const service = await Service.findOrFail(id)
