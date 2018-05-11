@@ -8,14 +8,13 @@ class ServiceSchema extends Schema {
       table.increments()
       table.timestamps()
       table.string('name').notNullable()
-      table.string('short-description').nullable()
       table.text('description').nullable()
       table.integer('price-per-month').nullable()
       table.integer('events-per-month').nullable()
-      table.integer('history').nullable()
+      table.integer('history-in-days').nullable()
       table.integer('users').nullable()
       table.string('concurrent-builds').nullable()
-      table.integer('builds').nullable()
+      table.string('builds-per-day').nullable()
     })
   }
 
