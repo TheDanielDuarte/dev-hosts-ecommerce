@@ -1,7 +1,7 @@
 'use strict'
 
 const Server = use('App/Models/Server')
-const NotFoundException = use('App/Exceptions/NotFoundExceptions')
+const NotFoundException = use('App/Exceptions/NotFoundException')
 
 class FindServer {
   async handle ({ request, params: { id } }, next) {
