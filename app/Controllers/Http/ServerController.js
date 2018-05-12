@@ -1,7 +1,7 @@
 'use strict'
 
 const Server = use('App/Models/Server')
-// const serverFields = ['name', 'memory-in-gb', 'cpu', 'storage-in-gb', 'transfer-in-tb', 'price-per-month']
+const serverFields = ['name', 'memory-in-gb', 'cpu', 'storage-in-gb', 'transfer-in-tb', 'price-per-month']
 
 class ServerController {
   async index () {
