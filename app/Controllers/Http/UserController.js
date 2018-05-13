@@ -1,9 +1,12 @@
 'use strict'
 
 const User = use('App/Models/User')
-const userFields = ['first-name', 'last-name', 'email', 'password', 'role', 'charge-per-month']
 const Mail = use('Mail')
 const NotFoundException = use('App/Exceptions/NotFoundException')
+const NotAuthenticatedException = use('App/Exceptions/NotAuthenticatedException')
+const BlackListedToken = use('App/Models/BlackListedToken')
+const Encryption = use('Encryption')
+const userFields = ['first-name', 'last-name', 'email', 'password', 'charge-per-month']
 
 class UserController {
   async index () {
@@ -18,7 +21,7 @@ class UserController {
   async login({ auth, request, response }) {
     const { email, password } = request.post()
     try {
-      const jwt = await auth.attempt(email, password)
+      const jwt = await auth.withRefreshToken().attempt(email, password)
       const user = await User.findBy({ email })
       response
         .status(200)
@@ -31,18 +34,43 @@ class UserController {
           errors: []
         })
     } catch (error) {
-      return response
-        .status(403)
-        .json({
-          successfull: false,
-          errors: [error],
-          data: null
-        })
+      throw new NotAuthenticatedException(error)
+    }
+  }
+
+  async refreshToken({ auth, request }) {
+    const refreshToken = request.input('refresh-token')
+    try {
+      const token = await auth.generateForRefreshToken(refreshToken)
+      return {
+        successfull: true,
+        errors: [],
+        data: token
+      }
+    } catch (error) {
+      const [ , message ] = error.message.split(`${error.code}: `)
+      throw new NotAuthenticatedException(message)
+    }
+  }
+
+  async logout({ auth }) {
+    const user = await auth.getUser()
+    const token = Encryption.encrypt( auth.getAuthHeader() )
+    await auth.revokeTokensForUser(user)
+
+    await BlackListedToken.create({ token })
+
+    return {
+      successfull: true,
+      errors: [],
+      data: {
+        message: 'Logout successfully'
+      }
     }
   }
 
   async store ({ request, response, auth }) {
-    const data = request.only(userFields)
+    const data = request.only(userFields.filter(field => !field.includes('charge-per-month')))
     const user = await User.create(data)
 
     const promises = [ auth.generate(user), Mail.send('emails.register', {
@@ -70,7 +98,7 @@ class UserController {
       })
   }
 
-  async show ({ request }) {
+  async show ({ request, auth }) {
     const { user } = request.post()
 
     const [ services, servers, storageCenters ] = await Promise.all([

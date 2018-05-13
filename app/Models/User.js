@@ -31,7 +31,7 @@ class User extends Model {
    * @return {Object}
    */
   tokens () {
-    return this.belongsToMany('App/Models/Token')
+    return this.hasMany('App/Models/Token')
   }
 
   servers () {

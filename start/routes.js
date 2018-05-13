@@ -22,7 +22,7 @@ Route
     Route
       .resource('users', 'UserController')
       .middleware(new Map([
-        [['update', 'show', 'destroy'], ['auth:jwt', 'findUser', 'userIsCorrect']],
+        [['update', 'show', 'destroy'], ['auth:jwt', 'checkIfTokenIsBlackListed' , 'findUser', 'userIsCorrect']],
       ]))
       .validator(new Map([
         [['users.store'], ['StoreUser']],
@@ -31,6 +31,10 @@ Route
     Route
       .post('users/login', 'UserController.login')
     
+    Route.post('users/refresh-token', 'UserController.refreshToken')
+
+    Route.post('users/logout', 'UserController.logout').middleware(['auth'])
+
     // Route.get('storage-centers', 'StorageCenterController.index')
     // Route.get('storage-centers/:id', 'StorageCenterController.show').middleware(['findStorageCenter'])
     
