@@ -9,8 +9,9 @@ class CheckIfTokenIsBlackListed {
     // call next to advance the request
     const token = auth.getAuthHeader()
     const encryptedToken = await Encryption.encrypt(token)
+    const tokenInDB = await BlackListedToken.findBy({ token: encryptedToken })
 
-    if(BlackListedToken.findBy({ token: encryptedToken })) {
+    if(tokenInDB) {
       throw new TokenIsBlackListedException('This token is not valid anymore, please check you are logged in')
     }
     
