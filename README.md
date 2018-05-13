@@ -17,6 +17,8 @@ Users
 - __DELETE /api/users/:id__ - Delete a user
 - __GET /api/users/:id__ - Show a user
 - __POST /api/users/login__ - Login a user using JWT
+- __POST /api/users/logout__ - Logouts a user with a valid JWT
+- __POST /api/users/refresh-token__ - Using the refresh token sent back by the server when you logged in, you can ask for another token if the original expired
 
 Servers
 - __GET /api/servers__ - List all servers
