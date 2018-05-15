@@ -83,7 +83,7 @@ class UserController {
         },
         message => {
           message
-          .from('daniel@devhosts.com', 'Daniel')
+          .from('danielduarte2004@gmail.com', 'Daniel')
           .to(user.email)
           .subject(`Welcome to DevHosts, ${user['first-name']}`)
         }
