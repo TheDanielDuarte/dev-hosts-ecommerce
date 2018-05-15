@@ -101,7 +101,7 @@ class UserController {
     const { user } = request.post()
 
     const [ services, servers, storageCenters ] = await Promise.all([
-      user.services().fetch(),
+      user.services().with('group').fetch(),
       user.servers().fetch(),
       user.storageCenters().fetch()
     ])
@@ -149,7 +149,7 @@ class UserController {
     }
 
     const [ userServices, userServers, userStorageCenters ] = await Promise.all([
-      user.services().fetch(),
+      user.services().with('group').fetch(),
       user.servers().fetch(),
       user.storageCenters().fetch()
     ])
