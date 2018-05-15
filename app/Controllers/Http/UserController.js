@@ -73,21 +73,21 @@ class UserController {
     const user = await User.create(data)
 
     const promises = [ 
-    auth.withRefreshToken().generate(user), 
-    Mail.send('emails.register', {
-      user: {
-        ...user,
-        firstName: user['first-name'],
-        lastName: user['last-name']
-      }
-    },
-    message => {
-      message
-      .from('daniel@devhosts.com', 'Daniel')
-      .to(user.email)
-      .subject(`Welcome to DevHosts, ${user['first-name']}`)
-    }
-  ) 
+      auth.withRefreshToken().generate(user), 
+      Mail.send('emails.register', {
+          user: {
+            ...user,
+            firstName: user['first-name'],
+            lastName: user['last-name']
+          }
+        },
+        message => {
+          message
+          .from('daniel@devhosts.com', 'Daniel')
+          .to(user.email)
+          .subject(`Welcome to DevHosts, ${user['first-name']}`)
+        }
+      ) 
     ]
 
     const [ token ] = await Promise.all(promises)
