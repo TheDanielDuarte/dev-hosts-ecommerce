@@ -1,74 +1,28 @@
 'use strict'
 
-const { test, trait, before, after } = use('Test/Suite')('User')
+const { test, trait, beforeEach, afterEach } = use('Test/Suite')('User')
 const User = use('App/Models/user')
 const Database = use('Database')
+const userCredentials = { email: 'test@email.com', password: 'password' }
+const Hash = use('Hash')
 let user;
 
 trait('Test/ApiClient')
+trait('Auth/Client')
 
-before(async () => {
-  user = await User.create({ 'first-name': 'Daniel', 'last-name': 'Duarte', email: 'danielduarte2004@gmail.com', password: '123456789' })
-})
-
-test('It should login a user by sending back a jwt token', async ({ client, assert }) => {
-  const response = await client.post('/api/users/login').send({ email: user.email, password: '123456789' }).end()
-  response.assertStatus(200)
-  assert.exists(response.body.data.token)
-})
-
-test('It should not return an error when trying to see a profile of a user that doesn\'t exist', async ({ client, assert }) => {
-  const response = await client.get('/api/users/10660540085').end()
-
-  assert.isArray(response.body.errors)
-  assert.isTrue(response.body.errors.length >= 1)
-  response.assertStatus(404)
-  response.assertJSONSubset({
-    successfull: false,
-    data: null
+beforeEach(async () => {
+  user = await User.create({ 
+    'first-name': 'Daniel', 
+    'last-name': 'Duarte',
+    ...userCredentials
   })
 })
 
-test('It should not return an error when trying to update a user that doesn\'t exist', async ({ client, assert }) => {
-  const response = await client.patch('/api/users/10660540').send({ email: 'update@hotmail.com', password: 'updatedpwd' }).end()
+test('It should return a user\'s profile', async ({ client, assert }) => {
+  const response = await client.get(`/api/users/${user.id}`).loginVia(user, 'jwt').end()
 
-  assert.isArray(response.body.errors)
-  assert.isTrue(response.body.errors.length >= 1)
-  response.assertStatus(404)
-  response.assertJSONSubset({
-    successfull: false,
-    data: null
-  })
-})
-
-test('It should not return an error when trying to delete a user that doesn\'t exist', async ({ client, assert }) => {
-  const response = await client.delete('/api/users/10660540').end()
-
-  assert.isArray(response.body.errors)
-  assert.isTrue(response.body.errors.length >= 1)
-  response.assertStatus(404)
-  response.assertJSONSubset({
-    successfull: false,
-    data: null
-  })
-})
-
-test('It should return all Users', async ({ client, assert }) => {
-  const response = await client.get('/api/users').end()
-  const { $attributes: attributes } = user
-  assert.hasAnyKeys(response.body.data[0], attributes)
-  response.assertStatus(200)
-  response.assertJSONSubset({
-    errors: [],
-    successfull: true
-  })
-})
-
-test('It should update a user', async ({ client, assert }) => {
-  const response = await client.patch(`/api/users/${user.id}`).send({ email: 'test@yahoo.com' }).end()
-  const updatedUser = await User.find(user.id)
-
-  assert.strictEqual(updatedUser.email, 'test@yahoo.com')
+  assert.hasAnyKeys(response.body.data, Object.keys(user['$attributes']))
+  assert.containsAllKeys(response.body.data, ['servers', 'services', 'data-storage'])
   response.assertStatus(200)
   response.assertJSONSubset({
     successfull: true,
@@ -76,49 +30,106 @@ test('It should update a user', async ({ client, assert }) => {
   })
 })
 
-test('It should create a user', async ({ client, assert }) => {
-  const userData = {
-    'first-name': 'Julio',
-    'last-name': 'Perdomo',
-    email: 'julioperdomo@hotmail.com',
-    password: '123456789'
-  }
-  const response = await client.post('/api/users').send(userData).end()
-  response.assertStatus(201)
-
-  const createdUser = await User.find(response.body.data.user.id)
-
-  assert.exists(createdUser)
-
-  response.assertJSONSubset({
-    errors: [],
-    successfull: true,
-  })
-}).timeout(0)
-
-test('It should show a user profile', async ({ client, assert }) => {
+test('It shouldn\'t let me see a user profile without authenticating', async ({ client, assert }) => {
   const response = await client.get(`/api/users/${user.id}`).end()
 
+  assert.isNull(response.body.data)
+  assert.isFalse(response.body.successfull)
+  assert.isArray(response.body.errors)
+  assert.isTrue(response.body.errors.length > 0)
+  response.assertStatus(401)
+})
+
+test('It should let me update my user\'s profile', async ({ client, assert }) => {
+  const newEmail = 'another-test@yahoo.com'
+  const response = await client
+    .patch(`/api/users/${user.id}`)
+    .send({ email: newEmail })
+    .loginVia(user, 'jwt')
+    .end()
+
+  const userUpdated = await User.find(user.id)
+  assert.strictEqual(userUpdated.email, newEmail)
+  assert.notStrictEqual(userUpdated.email, user.email)
+  assert.hasAnyKeys(response.body.data, Object.keys(user['$attributes']))
+  assert.containsAllKeys(response.body.data, ['servers', 'services', 'data-storage'])
   response.assertStatus(200)
-  assert.hasAnyKeys(response.body.data, user['$attributes'])
   response.assertJSONSubset({
     successfull: true,
     errors: []
   })
 })
 
-test('It should delete a user', async ({ client, assert }) => {
+test('It shouldn\'t let me update my user\'s profile without authenticating', async ({ client, assert }) => {
+  const newPassword = 'new-password'
+  const response = await client
+    .patch(`/api/users/${user.id}`)
+    .send({ password: newPassword })
+    .end()
+
+  
+  const userUpdated = await User.find(user.id)
+  assert.strictEqual(userUpdated.password, user.password)
+  assert.notStrictEqual(userUpdated.password, await Hash.make(newPassword))
+  assert.isArray(response.body.errors)
+  assert.isTrue(response.body.errors.length > 0)
+  assert.isFalse(response.body.successfull)
+  response.assertStatus(401)
+})
+
+test('It should let me delete my user', async ({ client, assert }) => {
+  const response = await client
+    .delete(`/api/users/${user.id}`)
+    .loginVia(user, 'jwt')
+    .end()
+
+  const deletedUser = await User.find(user.id)
+  assert.notExists(deletedUser)
+  assert.containsAllKeys(response.body.data, ['servers', 'services', 'data-storage'])  
+  response.assertStatus(200)
+  response.assertJSONSubset({
+    successfull: true,
+    errors: []
+  })
+})
+
+test('It shouldn\'t let me delete my user without authenticating', async ({ client, assert }) => {
   const response = await client.delete(`/api/users/${user.id}`).end()
-  const deletedUser = User.find(user.id)
-  assert.isEmpty(deletedUser)
-  response.assertStatus(200)
+  const deletedUser = await User.find(user.id)
+
+  assert.exists(deletedUser)
+  response.assertStatus(401)
+  assert.isFalse(response.body.successfull)
+  assert.isArray(response.body.errors)
+  assert.isTrue(response.body.errors.length > 0)
+})
+
+test('It should create a user, and return an auth token back', async ({ client, assert }) => {
+  const response = await client
+    .post('/api/users')
+    .send({ 
+      email: 'mynewuser@hotmail.com', 
+      password: 'drowssap', 
+      'first-name': 'John', 
+      'last-name': 'Doe' 
+    })
+    .end()
+
+  const { id } = response.body.data.user
+  const userCreated = await User.find(id)
+
+  assert.exists(userCreated)
+  assert.exists(response.body.data.token.token)
+  assert.exists(response.body.data.token.refreshToken)
+  response.assertStatus(201)
   response.assertJSONSubset({
     successfull: true,
     errors: []
   })
-})
 
-after(async () => {
-  const users = await User.all()
-  await Promise.all(users.rows.map(user => user.delete()))
+  await userCreated.delete()
+}).timeout(0)
+
+afterEach(async () => { 
+  await user.delete()
 })

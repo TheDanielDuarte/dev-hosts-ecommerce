@@ -14,7 +14,7 @@ class FindService {
 
       request.body.service = service
     } catch (error) {
-      throw new NotFoundException(`Service with id - ${id} not found`)
+      throw new NotFoundException(`Service with id - ${id} not found`, 404)
     }
     await next()
   }

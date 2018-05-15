@@ -12,7 +12,7 @@ class CheckIfTokenIsBlackListed {
     const tokenInDB = await BlackListedToken.findBy({ token: encryptedToken })
 
     if(tokenInDB) {
-      throw new TokenIsBlackListedException('This token is not valid anymore, please check you are logged in')
+      throw new TokenIsBlackListedException('This token is not valid anymore, please check you are logged in', 401)
     }
     
     await next()

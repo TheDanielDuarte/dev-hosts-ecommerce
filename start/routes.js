@@ -14,9 +14,9 @@
 */
 
 const Route = use('Route')
-const middlewareMap = name => new Map([
-  [['update', 'show', 'delete'], [name]]
-])
+// const middlewareMap = name => new Map([
+//   [['update', 'show', 'delete'], [name]]
+// ])
 Route
   .group(() => {
     Route
@@ -28,11 +28,9 @@ Route
         [['users.store'], ['StoreUser']],
         [['users.update'], ['UpdateUser']]
       ]))
-    Route
-      .post('users/login', 'UserController.login')
-    
-    Route.post('users/refresh-token', 'UserController.refreshToken')
 
+    Route.post('users/login', 'UserController.login')
+    Route.post('users/refresh-token', 'UserController.refreshToken')
     Route.post('users/logout', 'UserController.logout').middleware(['auth'])
 
     Route.get('storage-centers', 'StorageCenterController.index')

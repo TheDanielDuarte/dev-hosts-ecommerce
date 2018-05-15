@@ -34,7 +34,7 @@ class UserController {
           errors: []
         })
     } catch (error) {
-      throw new NotAuthenticatedException(error)
+      throw new NotAuthenticatedException(error, 401)
     }
   }
 
@@ -49,7 +49,7 @@ class UserController {
       }
     } catch (error) {
       const [ , message ] = error.message.split(`${error.code}: `)
-      throw new NotAuthenticatedException(message)
+      throw new NotAuthenticatedException(message, 401)
     }
   }
 
@@ -73,7 +73,7 @@ class UserController {
     const data = request.only(userFields.filter(field => !field.includes('charge-per-month')))
     const user = await User.create(data)
 
-    const promises = [ auth.generate(user), Mail.send('emails.register', {
+    const promises = [ auth.withRefreshToken().generate(user), Mail.send('emails.register', {
         user: {
           ...user,
           firstName: user['first-name'],
@@ -129,7 +129,7 @@ class UserController {
       try {
         await user.services().attach(services)
       } catch (error) {
-        throw new NotFoundException('Service not found')
+        throw new NotFoundException('Service not found', 404)
       }
     }
     if(servers) {
@@ -137,7 +137,7 @@ class UserController {
       try {
         await user.servers().attach(servers)
       } catch (error) {
-        throw new NotFoundException('Server not found')
+        throw new NotFoundException('Server not found', 404)
       }
     }
     if(storage) {
@@ -145,13 +145,23 @@ class UserController {
       try {
         await user.storageCenters().attach(storage)
       } catch (error) {
-        throw new NotFoundException('Storage center not found')
+        throw new NotFoundException('Storage center not found', 404)
       }
     }
+
+    const [ userServices, userServers, userStorageCenters ] = await Promise.all([
+      user.services().fetch(),
+      user.servers().fetch(),
+      user.storageCenters().fetch()
+    ])
 
     user.merge(data)
 
     await user.save()
+
+    user.services = userServices
+    user.servers = userServers
+    user['data-storage'] = userStorageCenters
 
     return {
       successfull: true,
@@ -163,12 +173,22 @@ class UserController {
   async destroy ({ request }) {
     const { user } = request.post()
 
+    const [ services, servers, storageCenters ] = await Promise.all([
+      user.services().fetch(),
+      user.servers().fetch(),
+      user.storageCenters().fetch()
+    ])
+
+    user.servers = servers
+    user.services = services
+    user['data-storage'] = storageCenters
+
     await user.delete()
 
     return {
       successfull: true,
-      data: user,
-      errors: []
+      errors: [],
+      data: user
     }
   }
 }

@@ -10,7 +10,7 @@ class FindServer {
       const server = await Server.findOrFail(id)
       request.body.server = server
     } catch (error) {
-      throw new NotFoundException(`Server with id - ${id} not found`)
+      throw new NotFoundException(`Server with id - ${id} not found`, 404)
     }
     await next()
   }

@@ -10,7 +10,7 @@ class FindUser {
       const user = await User.findOrFail(id)
       request.body.user = user
     } catch (error) {
-      throw new NotFoundException(`User with id - ${id} not found`)
+      throw new NotFoundException(`User with id - ${id} not found`, 404)
     }
     await next()
   }

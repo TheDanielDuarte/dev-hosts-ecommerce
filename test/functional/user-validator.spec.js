@@ -1,44 +1,83 @@
 'use strict'
 
-const { test, trait, before, after } = use('Test/Suite')('User Validator')
+const { test, trait, beforeEach, afterEach } = use('Test/Suite')('User Validator')
 const User = use('App/Models/User')
+const Hash = use('Hash')
 let user;
 
-before(async () => {
-  user = await User.create({ 'first-name': 'Daniel', 'last-name': 'Duarte', email: 'danielduarte2004@gmail.com', password: '123456789' })
-})
-
 trait('Test/ApiClient')
+trait('Auth/Client')
 
-test('It shouldn\'t store a user with an invalid email', async ({ client, assert }) => {
-  const response = await client.post('/api/users').send({ email: 'wrong email', password: '97765431821', 'first-name': 'Wrong', 'last-name': 'email'}).end()
-
-  assert.exists(response.body.errors)
-  assert.isArray(response.body.errors)
-  
-  assert.isTrue(response.body.errors.length >= 1)
-  response.assertStatus(400)
-  response.assertJSONSubset({
-    successfull: false,
-    data: null
+beforeEach(async () => {
+  user = await User.create({  
+    'first-name': 'Daniel',
+    'last-name': 'Duarte',
+    email: 'test@email.com',
+    password: 'drowssap'
   })
 })
 
+test('It shouldn\'t let me update a user with an invalid email', async ({ client, assert }) => { 
+  const response = await client.patch(`/api/users/${user.id}`).loginVia(user, 'jwt').send({ email: 'wrong-email' }).end()
+  const updatedUser = await User.find(user.id)
 
-test('It shouldn\'t update a user with an invalid email', async ({ client, assert }) => {
-  const response = await client.patch(`/api/users/${user.id}`).send({ email: 'wrong email', password: '97765431821', 'first-name': 'Wrong', 'last-name': 'email'}).end()
-  assert.exists(response.body.errors)
-  assert.isArray(response.body.errors)
-  
-  assert.isTrue(response.body.errors.length >= 1)
+  assert.notStrictEqual(updatedUser.email, 'wrong-email')
   response.assertStatus(400)
-  response.assertJSONSubset({
-    successfull: false,
-    data: null
-  })
+  assert.isFalse(response.body.successfull)
+  assert.isArray(response.body.errors)
+  assert.isTrue(response.body.errors.length > 0)
 })
 
-after(async () => {
-  const users = await User.all()
-  await Promise.all(users.rows.map(user => user.delete()))
+test('It shouldn\'t let me update a user with an invalid password', async ({ client, assert }) => { 
+  const response = await client.patch(`/api/users/${user.id}`).loginVia(user, 'jwt').send({ password: '123' }).end() // Too short, must be at least 8 characters long
+  const updatedUser = await User.find(user.id)
+  
+  response.assertStatus(400)
+  assert.notStrictEqual(updatedUser.password, await Hash.make('123'))
+  assert.isFalse(response.body.successfull)
+  assert.isArray(response.body.errors)
+  assert.isTrue(response.body.errors.length > 0)
+})
+
+test('It shouldn\'t let me create a user if I miss at least 1 field', async ({ client, assert }) => { 
+  const response = await client
+    .post(`/api/users`)
+    .send({ 'email': 'test@hotmail.com', 'password': '87654321' })
+    .end() // Without 'first-name', nor 'last-name'
+    
+  assert.strictEqual(await User.getCount(), 1) // It didn't create any user
+  response.assertStatus(400)
+  assert.isFalse(response.body.successfull)
+  assert.isArray(response.body.errors)
+  assert.isTrue(response.body.errors.length > 0)
+})
+
+
+test('It shouldn\'t let me create a user with an email already used ', async ({ client, assert }) => { 
+  const response = await client
+    .post(`/api/users`)
+    .send({ email: 'test@email.com', 'first-name': 'test', 'last-name': '2nd', password: '9876543210' })
+    .end()
+  
+  response.assertStatus(400)
+  assert.isFalse(response.body.successfull)
+  assert.isArray(response.body.errors)
+  assert.isTrue(response.body.errors.length > 0)
+})
+
+
+test('It shouldn\'t let me create a user if a field is missing ', async ({ client, assert }) => { 
+  const response = await client
+    .post(`/api/users`)
+    .loginVia(user, 'jwt')
+    .send({ email: 'test@testemail.com', 'first-name': 'John', 'last-name': 'Doe' , password: '123' })
+    .end() 
+  response.assertStatus(400)
+  assert.isFalse(response.body.successfull)
+  assert.isArray(response.body.errors)
+  assert.isTrue(response.body.errors.length > 0)
+})
+
+afterEach(async () => {
+  await user.delete()
 })

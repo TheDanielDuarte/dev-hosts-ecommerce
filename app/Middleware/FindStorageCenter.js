@@ -10,7 +10,7 @@ class FindStorageCenter {
       const storageCenter = await StorageCenter.findOrFail(id)
       request.body.storageCenter = storageCenter
     } catch (error) {
-      throw new NotFoundException(`Storage Center with id - ${id} not found`)
+      throw new NotFoundException(`Storage Center with id - ${id} not found`, 404)
     }
     await next()
   }
