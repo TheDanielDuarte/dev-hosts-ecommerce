@@ -44,7 +44,7 @@ test('It shouldn\'t let me create a user if I miss at least 1 field', async ({ c
     .post(`/api/users`)
     .send({ 'email': 'test@hotmail.com', 'password': '87654321' })
     .end() // Without 'first-name', nor 'last-name'
-    
+
   assert.strictEqual(await User.getCount(), 1) // It didn't create any user
   response.assertStatus(400)
   assert.isFalse(response.body.successfull)
@@ -59,19 +59,6 @@ test('It shouldn\'t let me create a user with an email already used ', async ({ 
     .send({ email: 'test@email.com', 'first-name': 'test', 'last-name': '2nd', password: '9876543210' })
     .end()
   
-  response.assertStatus(400)
-  assert.isFalse(response.body.successfull)
-  assert.isArray(response.body.errors)
-  assert.isTrue(response.body.errors.length > 0)
-})
-
-
-test('It shouldn\'t let me create a user if a field is missing ', async ({ client, assert }) => { 
-  const response = await client
-    .post(`/api/users`)
-    .loginVia(user, 'jwt')
-    .send({ email: 'test@testemail.com', 'first-name': 'John', 'last-name': 'Doe' , password: '123' })
-    .end() 
   response.assertStatus(400)
   assert.isFalse(response.body.successfull)
   assert.isArray(response.body.errors)

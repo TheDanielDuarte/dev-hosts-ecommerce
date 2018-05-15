@@ -21,6 +21,7 @@ Route
   .group(() => {
     Route
       .resource('users', 'UserController')
+      .except(['index'])
       .middleware(new Map([
         [['update', 'show', 'destroy'], ['auth:jwt', 'checkIfTokenIsBlackListed' , 'findUser', 'userIsCorrect']],
       ]))

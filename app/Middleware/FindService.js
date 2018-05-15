@@ -10,9 +10,9 @@ class FindService {
     try {
       const service = await Service.query().where({ id }).with('group').fetch()
       
-      if(!(service.rows.length > 0)) throw new NotFoundException(`Service with id - ${id} not found`)
+      if(!(service.rows.length > 0)) throw new NotFoundException(`Service with id - ${id} not found`, 404)
 
-      request.body.service = service
+      request.body.service = service.rows[0]
     } catch (error) {
       throw new NotFoundException(`Service with id - ${id} not found`, 404)
     }

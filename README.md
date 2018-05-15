@@ -11,7 +11,6 @@
 
 ###### API
 Users
-- __GET /api/users__ - List all users
 - __GET /api/users/:id__ - Show a user
 - __PATCH /api/users/:id__ - Update a user
 - __DELETE /api/users/:id__ - Delete a user

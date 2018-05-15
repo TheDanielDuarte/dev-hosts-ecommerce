@@ -1,7 +1,7 @@
 'use strict'
 
 const StorageCenter = use('App/Models/StorageCenter')
-const storageCenterFields = ['name', 'short-description', 'storage-in-gb', 'transfer-in-tb', 'price-per-month', 'builds-per-day', 'concurrent-builds']
+// const storageCenterFields = ['name', 'short-description', 'storage-in-gb', 'transfer-in-tb', 'price-per-month', 'builds-per-day', 'concurrent-builds']
 
 class StorageCenterController {
   async index () {

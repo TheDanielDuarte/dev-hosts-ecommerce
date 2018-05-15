@@ -5,16 +5,15 @@ const BlackListedToken = use('App/Models/BlackListedToken')
 const TokenIsBlackListedException = use('App/Exceptions/TokenIsBlackListedException')
 
 class CheckIfTokenIsBlackListed {
-  async handle ({ auth, request }, next) {
-    // call next to advance the request
+  async handle ({ auth }, next) {
     const token = auth.getAuthHeader()
-    const encryptedToken = await Encryption.encrypt(token)
-    const tokenInDB = await BlackListedToken.findBy({ token: encryptedToken })
+    const tokenInDB = await BlackListedToken.findBy({ token })
 
-    if(tokenInDB) {
+    if(tokenInDB) 
       throw new TokenIsBlackListedException('This token is not valid anymore, please check you are logged in', 401)
-    }
     
+    
+    // call next to advance the request
     await next()
   }
 }

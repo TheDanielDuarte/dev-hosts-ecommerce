@@ -13,7 +13,7 @@ class ServerController {
     }
   }
 
-  async show ({ response, request }) {
+  async show ({ request }) {
     const { server } = request.post()
     return {
       successfull: true,

@@ -23,7 +23,7 @@ class UserIsCorrect {
         }
       }
       
-      response.forbidden({
+      response.status(401).json({
         errors: [`You cannot ${message} someone's profile`],
         successfull: false,
         data: null

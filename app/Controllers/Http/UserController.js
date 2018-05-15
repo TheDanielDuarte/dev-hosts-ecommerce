@@ -5,18 +5,17 @@ const Mail = use('Mail')
 const NotFoundException = use('App/Exceptions/NotFoundException')
 const NotAuthenticatedException = use('App/Exceptions/NotAuthenticatedException')
 const BlackListedToken = use('App/Models/BlackListedToken')
-const Encryption = use('Encryption')
 const userFields = ['first-name', 'last-name', 'email', 'password', 'charge-per-month']
 
 class UserController {
-  async index () {
-    const users = await User.all()
-    return {
-      successfull: true,
-      errors: [],
-      data: users
-    }
-  }
+  // async index () {
+  //   const users = await User.all()
+  //   return {
+  //     successfull: true,
+  //     errors: [],
+  //     data: users
+  //   }
+  // }
 
   async login({ auth, request, response }) {
     const { email, password } = request.post()
@@ -55,7 +54,7 @@ class UserController {
 
   async logout({ auth }) {
     const user = await auth.getUser()
-    const token = Encryption.encrypt( auth.getAuthHeader() )
+    const token = auth.getAuthHeader()
     await auth.revokeTokensForUser(user)
 
     await BlackListedToken.create({ token })

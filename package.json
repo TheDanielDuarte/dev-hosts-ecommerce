@@ -32,7 +32,9 @@
     "mysql": "^2.15.0",
     "url-parse": "^1.4.0"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "random-number": "^0.0.9"
+  },
   "autoload": {
     "App": "./app"
   }
