@@ -14,11 +14,11 @@
 */
 
 const Route = use('Route')
-// const middlewareMap = name => new Map([
-//   [['update', 'show', 'delete'], [name]]
-// ])
+
+// Info: https://adonisjs.com/docs/4.1/routing#_route_groups
 Route
   .group(() => {
+    // Info: https://adonisjs.com/docs/4.1/routing#_route_resources
     Route
       .resource('users', 'UserController')
       .except(['index'])
@@ -42,16 +42,6 @@ Route
     
     Route.get('servers', 'ServerController.index')
     Route.get('servers/:id', 'ServerController.show').middleware(['findServer'])
-    
-    // Route
-    //   .resource('storage-centers', 'StorageCenterController')
-    //   .middleware(middlewareMap('findStorageCenter'))
-    // Route
-    //   .resource('services', 'ServiceController')
-    //   .middleware(middlewareMap('findService'))
-    // Route
-    //   .resource('servers', 'ServerController')
-    //   .middleware(middlewareMap('findServer'))
   })
   .prefix('api')
 
