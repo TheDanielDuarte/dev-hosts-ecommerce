@@ -56,7 +56,6 @@ Services
 ```
 - When your token expires you can send a POST request to /api/users/refresh-token with the refresh token it was sent back to you when you logged in or created your account.
 - When a new user is created, a jwt token will be sent back as part of the response so the user doesn't have to login.
-- When a new user is created, a welcome email will be sent.
 - Due to the form of authentication of the app (using jwt), you'll have to send in each request your credentials in the header. Set the Authorization = Bearer &lt;token&gt; header to authenticate the request.
 - When you want to logout send a POST request to /api/users/logout, you don't have to send anything in the payload, you just need to send your jwt token in the headers like any other protected route. (The jwt must be valid)
 - The only way that a user can subscribe to a server, service or storage center is to send a PATCH request to /api/users/:id with the payload containing any or all of these fields:
