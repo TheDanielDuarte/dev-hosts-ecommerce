@@ -1,7 +1,6 @@
 'use strict'
 
 const User = use('App/Models/User')
-const Mail = use('Mail')
 const NotFoundException = use('App/Exceptions/NotFoundException')
 const NotAuthenticatedException = use('App/Exceptions/NotAuthenticatedException')
 const BlackListedToken = use('App/Models/BlackListedToken')
@@ -72,25 +71,7 @@ class UserController {
     const data = request.only(userFields.filter(field => !field.includes('charge-per-month')))
     const user = await User.create(data)
 
-    const promises = [ 
-      auth.withRefreshToken().generate(user), 
-      Mail.send('emails.register', {
-          user: {
-            ...user,
-            firstName: user['first-name'],
-            lastName: user['last-name']
-          }
-        },
-        message => {
-          message
-          .from('danielduarte2004@gmail.com', 'Daniel')
-          .to(user.email)
-          .subject(`Welcome to DevHosts, ${user['first-name']}`)
-        }
-      ) 
-    ]
-
-    const [ token ] = await Promise.all(promises)
+    const token = await auth.withRefreshToken().generate(user)
 
     return response
       .status(201)
