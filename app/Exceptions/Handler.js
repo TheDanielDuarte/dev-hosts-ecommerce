@@ -21,24 +21,24 @@ class ExceptionHandler extends BaseExceptionHandler {
    * @return {void}
    */
   async handle (error, { response, request }) {
-    switch(error.name) {
-      case 'HttpException': {
-        const  [ , ...methodArray ] = error.message.match(/[A-Z]/g)
-        const method = methodArray.join('')
-        response.status(405)
+    console.log(error)
+    if(error.name === 'HttpException') {
+      const  [ , ...methodArray ] = error.message.match(/[A-Z]/g)
+      const method = methodArray.join('')
+      response.status(405)
 
-        response.json({
-          errors: [`You cannot send ${method} to ${request.url()}`],
-          successfull: false,
-          data: null
-        })
-        
-        return
-      }
+      response.json({
+        errors: [`You cannot send ${method} to ${request.url()}`],
+        successfull: false,
+        data: null
+      })
+      
+      return
     }
 
-    // console.log('executed')
     const [ , message] = error.message.split(`${error.code}: `)
+
+    console.log()
     response.status(error.status).json({
       successfull: false,
       errors: [message || error.message],
