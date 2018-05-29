@@ -1,8 +1,8 @@
 # Developer Hangout Coding Challenge
 ## May 2018 - e-commerce backend
 
-*Daniel Duarte* </br>
-*For the backend: Adonisjs </br>
+Daniel Duarte </br>
+For the backend: Adonisjs </br>
 
 ##### Routes
 - **GET /**  - Welcome page of the application. There are some links to sign up, log in and look at products offered
