@@ -21,7 +21,6 @@ class ExceptionHandler extends BaseExceptionHandler {
    * @return {void}
    */
   async handle (error, { response, request }) {
-    console.log(error)
     if(error.name === 'HttpException') {
       const  [ , ...methodArray ] = error.message.match(/[A-Z]/g)
       const method = methodArray.join('')
@@ -37,8 +36,6 @@ class ExceptionHandler extends BaseExceptionHandler {
     }
 
     const [ , message] = error.message.split(`${error.code}: `)
-
-    console.log()
     response.status(error.status).json({
       successfull: false,
       errors: [message || error.message],

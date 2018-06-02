@@ -30,7 +30,7 @@ Route
         [['users.update'], ['UpdateUser']]
       ]))
 
-    Route.post('users/login', 'UserController.login')
+    Route.post('users/login', 'UserController.login').validator(['Login'])
     Route.post('users/refresh-token', 'UserController.refreshToken')
     Route.post('users/logout', 'UserController.logout').middleware(['auth'])
 

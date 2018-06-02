@@ -7,15 +7,6 @@ const BlackListedToken = use('App/Models/BlackListedToken')
 const userFields = ['first-name', 'last-name', 'email', 'password', 'charge-per-month']
 
 class UserController {
-  // async index () {
-  //   const users = await User.all()
-  //   return {
-  //     successfull: true,
-  //     errors: [],
-  //     data: users
-  //   }
-  // }
-
   async login({ auth, request, response }) {
     const { email, password } = request.post()
     try {
@@ -32,7 +23,7 @@ class UserController {
           errors: []
         })
     } catch (error) {
-      throw new NotAuthenticatedException(error, 401)
+      throw error
     }
   }
 
@@ -47,6 +38,10 @@ class UserController {
       }
     } catch (error) {
       const [ , message ] = error.message.split(`${error.code}: `)
+      
+      if(message.includes('undefined'))
+        throw new NotAuthenticatedException('Please specify the refresh-token sent back when you logged in')
+      
       throw new NotAuthenticatedException(message, 401)
     }
   }
@@ -82,7 +77,7 @@ class UserController {
       })
   }
 
-  async show ({ request, auth }) {
+  async show ({ request }) {
     const { user } = request.post()
 
     const [ services, servers, storageCenters ] = await Promise.all([
