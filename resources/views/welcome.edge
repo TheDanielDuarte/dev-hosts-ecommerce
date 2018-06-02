@@ -1,15 +1,17 @@
-@layout('layout')
-
-@section('links')
-  {{ css('styles.34c57ab7888ec1573f9c') }}
-@endsection
-
-@section('content')
+<!DOCTYPE html><html lang="en"><head>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" rel="stylesheet">
+  <meta charset="utf-8">
+  <title>DevHosts</title>
+  <base href="/">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="{{ assetsUrl('assets/favicon.ico') }}">
+  {{ css('styles.8794f2531cc52e3c07c5.css') }}
+</head>
+<body>
   <app-root></app-root>
-@endsection
 
-@section('scripts')
-  {{ script('runtime.6afe30102d8fe7337431') }}
-  {{ script('polyfills.2903ad11212d7d797800') }}
-  {{ script('main.12f7923ba6b7f76d51d8') }}
-@endsection
+  {{ script('runtime.6afe30102d8fe7337431.js') }}
+  {{ script('polyfills.cf535d2993b5def59ab4.js') }}
+  {{ script('main.b8e96b72a36b4c3031c8.js') }}
+</body></html>
