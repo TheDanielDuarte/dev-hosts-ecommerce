@@ -19,7 +19,7 @@ class UserController {
             token: jwt,
             user
           },
-          successfull: true,
+          successful: true,
           errors: []
         })
     } catch (error) {
@@ -32,7 +32,7 @@ class UserController {
     try {
       const token = await auth.generateForRefreshToken(refreshToken)
       return {
-        successfull: true,
+        successful: true,
         errors: [],
         data: token
       }
@@ -54,7 +54,7 @@ class UserController {
     await BlackListedToken.create({ token })
 
     return {
-      successfull: true,
+      successful: true,
       errors: [],
       data: {
         message: 'Logout successfully'
@@ -72,7 +72,7 @@ class UserController {
       .status(201)
       .json({
         errors: [],
-        successfull: true,
+        successful: true,
         data: { user, token }
       })
   }
@@ -92,7 +92,7 @@ class UserController {
 
     return {
       errors: [],
-      successfull: true,
+      successful: true,
       data: user
     }
   }
@@ -143,7 +143,7 @@ class UserController {
     user['data-storage'] = userStorageCenters
 
     return {
-      successfull: true,
+      successful: true,
       errors: [],
       data: user
     }
@@ -165,7 +165,7 @@ class UserController {
     await user.delete()
 
     return {
-      successfull: true,
+      successful: true,
       errors: [],
       data: user
     }

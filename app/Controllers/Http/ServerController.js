@@ -7,7 +7,7 @@ class ServerController {
   async index () {
     const servers = await Server.all()
     return {
-      successfull: true,
+      successful: true,
       errors: [],
       data: servers
     }
@@ -16,7 +16,7 @@ class ServerController {
   async show ({ request }) {
     const { server } = request.post()
     return {
-      successfull: true,
+      successful: true,
       errors: [],
       data: server
     }

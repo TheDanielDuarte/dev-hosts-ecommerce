@@ -48,9 +48,9 @@ Services
 - All the responses you'll get back from the server will be formatted like 
 ```json
   {
-    "successfull": "A boolean indicating if everything went right",
+    "successful": "A boolean indicating if everything went right",
     "errors": "Either an empty array or an array full of errors",
-    "data": "Can be null or an object depending on 'successfull'" 
+    "data": "Can be null or an object depending on 'successful'" 
   }
 ```
 - The JWT tokens expire in 1 hour

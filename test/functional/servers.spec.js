@@ -43,9 +43,9 @@ test('It should show list all the servers', async ({ client, assert }) => {
   const response = await client
     .get('/api/servers')
     .end()
-  const { successfull, data } = response.body
+  const { successful, data } = response.body
 
-  assert.isTrue(successfull)
+  assert.isTrue(successful)
   response.assertStatus(200)
   assert.isArray(data)
   assert.strictEqual(data.length, 2)
@@ -54,11 +54,11 @@ test('It should show list all the servers', async ({ client, assert }) => {
 test('It should return a single server', async ({ client, assert }) => {
   const index = randomNumber({ integer: true, min: servers[0].id, max: servers[1].id })
   const response = await client.get(`/api/servers/${index}`).end()
-  const { successfull, data } = response.body
+  const { successful, data } = response.body
   const server = servers[index > servers[0].id ? 1 : 0]
 
   response.assertStatus(200)
-  assert.isTrue(successfull)
+  assert.isTrue(successful)
   assert.isNotNull(data)
   assert.containsAllKeys(data, server['$attributes'])
 })
@@ -71,10 +71,10 @@ test('It should return an error if you\'re trying to see a server that does not 
   })
 
   const response = await client.get(`/api/servers/${index + 2}`).end()
-  const { successfull, data, errors } = response.body
+  const { successful, data, errors } = response.body
 
   response.assertStatus(404)
-  assert.isFalse(successfull)
+  assert.isFalse(successful)
   assert.isArray(errors)
   assert.strictEqual(errors[0], `Server with id - ${index + 2} not found`)
   assert.isNull(data)
@@ -118,11 +118,11 @@ test('It should return an error if you try to subscribe to a server that does no
     })
     .loginVia(user, 'jwt')
     .end()
-  const { successfull, errors, data } = response.body
+  const { successful, errors, data } = response.body
   const userServers = await user.servers().wherePivot('user_id', user.id).fetch()
   
   response.assertStatus(404)
-  assert.isFalse(successfull)
+  assert.isFalse(successful)
   assert.isNull(data)
   assert.isNotNull(userServers)
   assert.strictEqual(userServers.rows.length, 0)

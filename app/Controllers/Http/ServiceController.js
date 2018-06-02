@@ -8,7 +8,7 @@ class ServiceController {
   async index () {
     const services = await Service.query().with('group').fetch()
     return {
-      successfull: true,
+      successful: true,
       errors: [],
       data: services
     }
@@ -17,7 +17,7 @@ class ServiceController {
   async show ({ request }) {
     const { service } = request.post()
     return {
-      successfull: true,
+      successful: true,
       errors: [],
       data: service
     }

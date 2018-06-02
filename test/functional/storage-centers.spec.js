@@ -39,10 +39,10 @@ test('It should show list all the storage centers', async ({ client, assert }) =
   const response = await client
     .get('/api/storage-centers')
     .end()
-  const { successfull, data } = response.body
+  const { successful, data } = response.body
 
   response.assertStatus(200)
-  assert.isTrue(successfull)
+  assert.isTrue(successful)
   assert.isArray(data)
   assert.strictEqual(data.length, 2)
 })
@@ -50,11 +50,11 @@ test('It should show list all the storage centers', async ({ client, assert }) =
 test('It should return a single storage center', async ({ client, assert }) => {
   const index = randomNumber({ integer: true, min: storageCenters[0].id, max: storageCenters[1].id })
   const response = await client.get(`/api/storage-centers/${index}`).end()
-  const { successfull, data } = response.body
+  const { successful, data } = response.body
   const storageCenter = storageCenters[index > storageCenters[0].id ? 1 : 0]
 
   response.assertStatus(200)
-  assert.isTrue(successfull)
+  assert.isTrue(successful)
   assert.isNotNull(data)
   assert.containsAllKeys(data, storageCenter['$attributes'])
 })
@@ -67,10 +67,10 @@ test('It should return an error if you try to see a storage center that does not
   })
 
   const response = await client.get(`/api/storage-centers/${index + 2}`).end()
-  const { successfull, data, errors } = response.body
+  const { successful, data, errors } = response.body
 
   response.assertStatus(404)
-  assert.isFalse(successfull)
+  assert.isFalse(successful)
   assert.isArray(errors)
   assert.strictEqual(errors[0], `Storage Center with id - ${index + 2} not found`)
   assert.isNull(data)
@@ -114,11 +114,11 @@ test('It should return an error if you try to subscribe to an storage center tha
     })
     .loginVia(user, 'jwt')
     .end()
-  const { successfull, errors, data } = response.body
+  const { successful, errors, data } = response.body
   const userStorageCenters = await user.storageCenters().wherePivot('user_id', user.id).fetch()
   
   response.assertStatus(404)
-  assert.isFalse(successfull)
+  assert.isFalse(successful)
   assert.isNull(data)
   assert.isNotNull(userStorageCenters)
   assert.strictEqual(userStorageCenters.rows.length, 0)

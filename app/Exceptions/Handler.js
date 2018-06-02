@@ -28,7 +28,7 @@ class ExceptionHandler extends BaseExceptionHandler {
 
       response.json({
         errors: [`You cannot send ${method} to ${request.url()}`],
-        successfull: false,
+        successful: false,
         data: null
       })
       
@@ -37,7 +37,7 @@ class ExceptionHandler extends BaseExceptionHandler {
 
     const [ , message] = error.message.split(`${error.code}: `)
     response.status(error.status).json({
-      successfull: false,
+      successful: false,
       errors: [message || error.message],
       data: null
     })

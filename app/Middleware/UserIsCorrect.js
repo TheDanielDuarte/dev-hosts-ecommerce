@@ -25,7 +25,7 @@ class UserIsCorrect {
       
       response.status(401).json({
         errors: [`You cannot ${message} someone's profile`],
-        successfull: false,
+        successful: false,
         data: null
       })
     }

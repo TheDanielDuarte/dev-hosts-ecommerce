@@ -34,7 +34,7 @@ class StoreUser {
     return this.ctx.response
       .status(400)
       .json({
-        successfull: false,
+        successful: false,
         errors,
         data: null
       })

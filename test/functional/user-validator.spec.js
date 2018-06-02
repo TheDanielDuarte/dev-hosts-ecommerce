@@ -23,7 +23,7 @@ test('It shouldn\'t let me update a user with an invalid email', async ({ client
 
   assert.notStrictEqual(updatedUser.email, 'wrong-email')
   response.assertStatus(400)
-  assert.isFalse(response.body.successfull)
+  assert.isFalse(response.body.successful)
   assert.isArray(response.body.errors)
   assert.isTrue(response.body.errors.length > 0)
 })
@@ -34,7 +34,7 @@ test('It shouldn\'t let me update a user with an invalid password', async ({ cli
   
   response.assertStatus(400)
   assert.notStrictEqual(updatedUser.password, await Hash.make('123'))
-  assert.isFalse(response.body.successfull)
+  assert.isFalse(response.body.successful)
   assert.isArray(response.body.errors)
   assert.isTrue(response.body.errors.length > 0)
 })
@@ -47,7 +47,7 @@ test('It shouldn\'t let me create a user if I miss at least 1 field', async ({ c
 
   assert.strictEqual(await User.getCount(), 1) // It didn't create any user
   response.assertStatus(400)
-  assert.isFalse(response.body.successfull)
+  assert.isFalse(response.body.successful)
   assert.isArray(response.body.errors)
   assert.isTrue(response.body.errors.length > 0)
 })
@@ -60,7 +60,7 @@ test('It shouldn\'t let me create a user with an email already used ', async ({ 
     .end()
   
   response.assertStatus(400)
-  assert.isFalse(response.body.successfull)
+  assert.isFalse(response.body.successful)
   assert.isArray(response.body.errors)
   assert.isTrue(response.body.errors.length > 0)
 })

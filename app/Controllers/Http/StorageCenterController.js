@@ -8,7 +8,7 @@ class StorageCenterController {
     const storageCenters = await StorageCenter.all()
     return {
       errors: [],
-      successfull: true,
+      successful: true,
       data: storageCenters
     }
   }
@@ -18,7 +18,7 @@ class StorageCenterController {
     const { storageCenter } = request.post()
     return {
       errors: [],
-      successfull: true,
+      successful: true,
       data: storageCenter
     }
   }

@@ -26,7 +26,7 @@ test('It should return a user\'s profile', async ({ client, assert }) => {
   assert.containsAllKeys(response.body.data, ['servers', 'services', 'data-storage'])
   response.assertStatus(200)
   response.assertJSONSubset({
-    successfull: true,
+    successful: true,
     errors: []
   })
 })
@@ -35,7 +35,7 @@ test('It shouldn\'t let me see a user profile without authenticating', async ({ 
   const response = await client.get(`/api/users/${user.id}`).end()
 
   assert.isNull(response.body.data)
-  assert.isFalse(response.body.successfull)
+  assert.isFalse(response.body.successful)
   assert.isArray(response.body.errors)
   assert.isTrue(response.body.errors.length > 0)
   response.assertStatus(401)
@@ -56,7 +56,7 @@ test('It should let me update my user\'s profile', async ({ client, assert }) =>
   assert.containsAllKeys(response.body.data, ['servers', 'services', 'data-storage'])
   response.assertStatus(200)
   response.assertJSONSubset({
-    successfull: true,
+    successful: true,
     errors: []
   })
 })
@@ -74,7 +74,7 @@ test('It shouldn\'t let me update my user\'s profile without authenticating', as
   assert.notStrictEqual(userUpdated.password, await Hash.make(newPassword))
   assert.isArray(response.body.errors)
   assert.isTrue(response.body.errors.length > 0)
-  assert.isFalse(response.body.successfull)
+  assert.isFalse(response.body.successful)
   response.assertStatus(401)
 })
 
@@ -89,7 +89,7 @@ test('It should let me delete my user', async ({ client, assert }) => {
   assert.containsAllKeys(response.body.data, ['servers', 'services', 'data-storage'])  
   response.assertStatus(200)
   response.assertJSONSubset({
-    successfull: true,
+    successful: true,
     errors: []
   })
 })
@@ -100,7 +100,7 @@ test('It shouldn\'t let me delete my user without authenticating', async ({ clie
 
   assert.exists(deletedUser)
   response.assertStatus(401)
-  assert.isFalse(response.body.successfull)
+  assert.isFalse(response.body.successful)
   assert.isArray(response.body.errors)
   assert.isTrue(response.body.errors.length > 0)
 })
@@ -124,7 +124,7 @@ test('It should create a user, and return an auth token back', async ({ client, 
   assert.exists(response.body.data.token.refreshToken)
   response.assertStatus(201)
   response.assertJSONSubset({
-    successfull: true,
+    successful: true,
     errors: []
   })
 
@@ -137,9 +137,9 @@ test('It should return a token if the login was succesfull', async ({ client, as
     .post('/api/users/login')
     .send(userCredentials)
     .end()
-  const { successfull, data: { token: { token, refreshToken } } } = response.body
+  const { successful, data: { token: { token, refreshToken } } } = response.body
   response.assertStatus(200)
-  assert.isTrue(successfull)
+  assert.isTrue(successful)
   assert.exists(token)
   assert.exists(refreshToken)
 })
@@ -158,9 +158,9 @@ test('Using a valid refresh token it should return a new token', async ({ client
     })
     .end()
 
-  const { successfull, data: { refreshToken, token } } = response.body
+  const { successful, data: { refreshToken, token } } = response.body
   response.assertStatus(200)
-  assert.isTrue(successfull)
+  assert.isTrue(successful)
   assert.exists(token)
   assert.strictEqual(refreshToken, authTokens.refreshToken) // It sent the same refreshToken
 })
@@ -170,9 +170,9 @@ test('It should return an error if you\'re trying to see the profile of user tha
     .get(`/api/users/${user.id + 1}`)
     .loginVia(user, 'jwt')
     .end()
-  const { successfull, errors, data } = response.body
+  const { successful, errors, data } = response.body
   response.assertStatus(404)
-  assert.isFalse(successfull)
+  assert.isFalse(successful)
   assert.strictEqual(errors[0], `User with id - ${user.id + 1} not found`)
   assert.isNull(data)
 })
@@ -184,9 +184,9 @@ test('It shouldn\'t let me see anyone else profile', async ({ client, assert }) 
     .loginVia(user, 'jwt') // Note, I'm using the credentials of the user previously created
     .end()
 
-  const { successfull, data, errors } = response.body
+  const { successful, data, errors } = response.body
   response.assertStatus(401)
-  assert.isFalse(successfull)
+  assert.isFalse(successful)
   assert.isNull(data)
   assert.strictEqual(errors[0], 'You cannot see someone\'s profile')
 })
@@ -200,11 +200,11 @@ test('It should blacklist a token if a user logs out', async ({ client, assert }
     .loginVia(user, 'jwt')
     .end()
 
-  const { successfull, data } = response.body
+  const { successful, data } = response.body
   blackListedTokensCount = await BlackListedToken.getCount()
   assert.strictEqual(blackListedTokensCount, 1)
   response.assertStatus(200)
-  assert.isTrue(successfull)
+  assert.isTrue(successful)
   assert.strictEqual(data.message, 'Logout successfully')
 })
 
@@ -228,9 +228,9 @@ test('It shouldn\'t let me access any protected routes if a user logs out', asyn
     .header('Authorization', `Bearer ${token}`)
     .end()
   
-  const { successfull, data, errors } = response.body
+  const { successful, data, errors } = response.body
   response.assertStatus(401)
-  assert.isFalse(successfull)
+  assert.isFalse(successful)
   assert.isNull(data)
   assert.strictEqual(errors[0], 'This token is not valid anymore, please check you are logged in')
 })
