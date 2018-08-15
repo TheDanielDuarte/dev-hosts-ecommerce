@@ -9,10 +9,10 @@
       "urls": [
         "/favicon.ico",
         "/index.html",
-        "/main.e5d9fb545dfb4e74c5c6.js",
+        "/main.669f5af128505ddf62a6.js",
         "/polyfills.7a0e6866a34e280f48e7.js",
         "/runtime.a66f828dca56eeb90e02.js",
-        "/styles.f1679d68f00aa3ec7e28.css"
+        "/styles.d6af2d36372f6ee909d9.css"
       ],
       "patterns": [
         "https:\\/\\/fonts\\.googleapis\\.com\\/css\\?family=Montserrat\\+Alternates:400,700",
@@ -62,11 +62,11 @@
     "/assets/icons/icon-72x72.png": "c457e56089a36952cd67156f9996bc4ce54a5ed9",
     "/assets/icons/icon-96x96.png": "3914125a4b445bf111c5627875fc190f560daa41",
     "/favicon.ico": "84161b857f5c547e3699ddfbffc6d8d737542e01",
-    "/index.html": "78d54d9646e72292ac3ee43740bc2d63e25a0c82",
-    "/main.e5d9fb545dfb4e74c5c6.js": "5eae3d71225e888cfef4ac225aae065d8ecf6a77",
+    "/index.html": "8e254b524832c82a83e7e433da7ed1387d9f7556",
+    "/main.669f5af128505ddf62a6.js": "7da880913789c659c9349d3c7fab4aa2aab04afe",
     "/polyfills.7a0e6866a34e280f48e7.js": "9f0b8341c0a0caec1581da2f255eb5dbb8e12303",
     "/runtime.a66f828dca56eeb90e02.js": "078e320cc6fdaf355836c3b1c52b059cdd33fc7e",
-    "/styles.f1679d68f00aa3ec7e28.css": "7e26d8c5bbfd6ca5e36279c2514f9ff31b5d5be1"
+    "/styles.d6af2d36372f6ee909d9.css": "fd0c38e11d143031d6de306995994036b3d3dff9"
   },
   "navigationUrls": [
     {
@@ -75,15 +75,15 @@
     },
     {
       "positive": false,
-      "regex": "^\\/(?:.+\\/)?[^\\/]*\\.[^\\/]*$"
+      "regex": "^\\/(?:.+\\/)?[^/]*\\.[^/]*$"
     },
     {
       "positive": false,
-      "regex": "^\\/(?:.+\\/)?[^\\/]*__[^\\/]*$"
+      "regex": "^\\/(?:.+\\/)?[^/]*__[^/]*$"
     },
     {
       "positive": false,
-      "regex": "^\\/(?:.+\\/)?[^\\/]*__[^\\/]*\\/.*$"
+      "regex": "^\\/(?:.+\\/)?[^/]*__[^/]*\\/.*$"
     }
   ]
 }
